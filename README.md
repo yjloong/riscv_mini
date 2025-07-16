@@ -1,4 +1,4 @@
-[简体中文](README_CN.md)
+[简体中文](README_CH.md)
 
 # Key Features
 - **Smart Dependency Chaining**: Precise incremental builds  
