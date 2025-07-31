@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include "sbi/riscv_asm.h"
 #include "sbi/riscv_encoding.h"
+#include "sbi/sbi_types.h"
 #include "serial.h"
 #include "sbi/sbi_bitops.h"
 #include "common.h"
@@ -38,7 +39,7 @@ void handle_trap_s()
   dead();
 }
 
-void s_main() {
+__aligned(8) void s_main() {
   puts("Hello, World!\r\n");
   while(1) 
     asm("wfi");
