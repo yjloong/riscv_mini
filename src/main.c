@@ -46,12 +46,13 @@ void s_main() {
 
 void m_main() {
   m2s();
-  __builtin_unreachable();
+  while(1)
+    asm("wfi");
 }
 
 void m2s() {
   csr_set(CSR_MSTATUS, MSTATUS_SIE);
-  writel(~0x0, (void*)(CLINT_BASE + CLINT_MTIMECMP));
+  writeq(~0x0UL, (void*)(CLINT_BASE + CLINT_MTIMECMP));
   csr_write(CSR_MIDELEG, ~0x0);
   csr_write(CSR_MEDELEG, ~0x0);
   csr_write(CSR_MIP, 0);
@@ -60,7 +61,8 @@ void m2s() {
   csr_write(CSR_MEPC, s_main);
   uint64_t status = csr_read(CSR_MSTATUS);
   status = INSERT_FIELD(status, MSTATUS_MPP, PRV_S);
-  status = INSERT_FIELD(status, MSTATUS_MPIE, 0); // when mret: mstatus.MIE = mstatus.MPIE; mstatus.MPIE = 1;
+  // when mret: mstatus.MIE = mstatus.MPIE; mstatus.MPIE = 1;
+  status = INSERT_FIELD(status, MSTATUS_MPIE, 0);
   csr_write(CSR_MSTATUS, status);
 
   csr_write(CSR_SATP, 0);

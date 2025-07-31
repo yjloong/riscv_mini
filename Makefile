@@ -38,9 +38,9 @@ ifeq (,$(findstring j,$(MAKEFLAGS)))
 	MAKEFLAGS += -j
 endif
 
-COMPILE_COMMANDS_GENERATOR := intercept-build-14
+COMPILE_COMMANDS_GENERATOR := $(firstword $(sort $(filter-out %~%,$(wildcard /usr/bin/intercept-build* /usr/local/bin/intercept-build* /opt/*/bin/intercept-build*))))
 all:
-	command -v $(COMPILE_COMMANDS_GENERATOR) > /dev/null && $(COMPILE_COMMANDS_GENERATOR) \
+	test -n "$(COMPILE_COMMANDS_GENERATOR)" && $(COMPILE_COMMANDS_GENERATOR) \
 		--cdb $(OUTPUT_DIR)/compile_commands.json --append make _all && \
 		sed -i 's#\bcc\b#$(CC)#' $(OUTPUT_DIR)/compile_commands.json \
 		|| make _all
